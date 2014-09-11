@@ -3,8 +3,6 @@ set -eo pipefail; [[ -n "$PLUSHU_TRACE" ]] && set -x
 
 PAGER=${PAGER:-less}
 
-plugins_dir=$PLUSHU_PLUGINS_ROOT/plugins
-
 plugin=${2%%[: ]*}
 query=$2
 
@@ -42,20 +40,20 @@ runpager () {
 if [[ -n $2 ]]; then
 
   # If that plugin exists
-  if [[ -d "$plugins_dir/$plugin" ]]; then
+  if [[ -d "$PLUSHU_PLUGINS_DIR/$plugin" ]]; then
 
     # For instances where a glob has no matches we want an empty list
     shopt -s nullglob
 
     # Get all README files with a file extension
-    readmes=("$plugins_dir/$plugin"/README.*)
+    readmes=("$PLUSHU_PLUGINS_DIR/$plugin"/README.*)
 
     # If that plugin has at least 1 README file
-    if [[ -f "$plugins_dir/$plugin/README" || "${#readmes[@]}" != 0 ]]
+    if [[ -f "$PLUSHU_PLUGINS_DIR/$plugin/README" || "${#readmes[@]}" != 0 ]]
     then
 
-      if [[ -f "$plugins_dir/$plugin/README" ]]; then
-        runpager "$plugins_dir/$plugin/README" "$query"
+      if [[ -f "$PLUSHU_PLUGINS_DIR/$plugin/README" ]]; then
+        runpager "$PLUSHU_PLUGINS_DIR/$plugin/README" "$query"
       fi
       for readme in "${readmes[@]}"; do
         runpager "$readme" "$query"
